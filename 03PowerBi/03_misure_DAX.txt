@@ -1,0 +1,92 @@
+MISURE DAX – Trasporti Napoli Dashboard 🚌
+Tabelle: municipalita, modi, quartieri, fermate, sezioni, linee, ore
+Filtri: municipalita[municipalita] (M1-M10) e modi[modo] (Bus, Metro, Funicolare)
+Collegamenti: municipalita <- quartieri <- fermate / sezioni · modi <- fermate / linee / ore
+
+Colore Modo   (tabella modi) =
+    SELECTEDVALUE ( modi[colore_modo], "#2E86AB" )
+
+Abitanti Totali   (tabella quartieri) =
+    SUM ( quartieri[abitanti] )
+    formato: #,##0
+
+Punteggio   (tabella quartieri) =
+    AVERAGE ( quartieri[punteggio_servizio] )
+    formato: 0
+
+Colore Giudizio   (tabella quartieri) =
+    SWITCH ( SELECTEDVALUE ( quartieri[giudizio] ), "Servito bene", "#2A9D8F", "Nella media", "#F2B134", "Servito poco", "#D1495B", "#5A6675" )
+
+N Fermate   (tabella fermate) =
+    COUNTROWS ( fermate )
+    formato: #,##0
+
+Passaggi Giorno   (tabella fermate) =
+    SUM ( fermate[passaggi] )
+    formato: #,##0
+
+Passaggi per Mille   (tabella fermate) =
+    DIVIDE ( [Passaggi Giorno], [Abitanti Totali] ) * 1000
+    formato: #,##0
+
+Fermate per Diecimila   (tabella fermate) =
+    DIVIDE ( [N Fermate], [Abitanti Totali] ) * 10000
+    formato: 0.0
+
+Stazioni   (tabella fermate) =
+    CALCULATE ( DISTINCTCOUNT ( fermate[fermata] ), fermate[modo] <> "Bus" )
+    formato: 0
+
+Attesa Media   (tabella fermate) =
+    AVERAGE ( fermate[attesa_min] )
+    formato: 0.0" min"
+
+Distanza Media   (tabella sezioni) =
+    DIVIDE ( SUMX ( sezioni, sezioni[dist_fermata_m] * sezioni[abitanti_sezione] ), SUM ( sezioni[abitanti_sezione] ) )
+    formato: #,##0" m"
+
+Distanza Stazione   (tabella sezioni) =
+    DIVIDE ( SUMX ( sezioni, sezioni[dist_stazione_m] * sezioni[abitanti_sezione] ), SUM ( sezioni[abitanti_sezione] ) )
+    formato: #,##0" m"
+
+Quota 300m   (tabella sezioni) =
+    DIVIDE ( CALCULATE ( SUM ( sezioni[abitanti_sezione] ), sezioni[dist_fermata_m] <= 300 ), SUM ( sezioni[abitanti_sezione] ) )
+    formato: 0.0%
+
+Quota Frequente   (tabella sezioni) =
+    DIVIDE ( CALCULATE ( SUM ( sezioni[abitanti_sezione] ), sezioni[dist_frequente_m] <= 500 ), SUM ( sezioni[abitanti_sezione] ) )
+    formato: 0.0%
+
+Quota Stazione   (tabella sezioni) =
+    DIVIDE ( CALCULATE ( SUM ( sezioni[abitanti_sezione] ), sezioni[dist_stazione_m] <= 800 ), SUM ( sezioni[abitanti_sezione] ) )
+    formato: 0.0%
+
+Abitanti Sezioni   (tabella sezioni) =
+    SUM ( sezioni[abitanti_sezione] )
+    formato: #,##0
+
+Anziani Lontani   (tabella sezioni) =
+    CALCULATE ( SUM ( sezioni[over65] ), sezioni[dist_fermata_m] > 300 )
+    formato: #,##0
+
+Colore Quota   (tabella sezioni) =
+    IF ( [Quota 300m] < 0.85, "#D1495B", IF ( [Quota 300m] < 0.95, "#F2B134", "#2A9D8F" ) )
+
+Colore Stazione   (tabella sezioni) =
+    IF ( [Quota Stazione] < 0.3, "#D1495B", IF ( [Quota Stazione] < 0.7, "#F2B134", "#2A9D8F" ) )
+
+Linee Attive   (tabella linee) =
+    COUNTROWS ( linee )
+    formato: 0
+
+Corse Linee   (tabella linee) =
+    SUM ( linee[corse_giorno] )
+    formato: #,##0
+
+Corse Ora   (tabella ore) =
+    SUM ( ore[corse] )
+    formato: #,##0
+
+📌 Le misure "Quota ..." e "Distanza ..." sono pesate sugli abitanti delle sezioni di censimento.
+📌 Le misure "Colore ..." danno il colore ai grafici.
+📌 I nomi delle misure sono diversi dai nomi delle colonne.
