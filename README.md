@@ -1,5 +1,7 @@
 # 🚌 Trasporto pubblico a Napoli: i quartieri sono serviti allo stesso modo?
 
+![Trasporti a Napoli](copertina.png)
+
 Progetto di **Francesco Autorino** – Data Analyst.
 
 🛠️ Strumenti: **SQL · Python · Power BI**
@@ -99,45 +101,24 @@ GTFS di ANM ──────┐   quartieri + sezioni + abitanti ──┐
 
 ---
 
-## 📁 5. I file in questo repository
+## 📁 5. Le cartelle del progetto
 
-| File | A cosa serve |
+| Cartella | Cosa contiene |
 |---|---|
-| `README.md` | Questo file |
-| `DESCRIZIONE_GITHUB.md` | Nome, descrizione e topics del repository |
-| `00_LEGGIMI.md` (in ogni cartella) | Una spiegazione corta di quella cartella |
-
-### 📂 01SQL
-
-| File | A cosa serve |
-|---|---|
-| `01_schema_concettuale.png` | 🧩 Lo schema concettuale (modello Entità-Relazione) |
-| `02_schema_logico.png` | 🗂️ Lo schema logico: tabelle, chiavi PK/FK e collegamenti |
-| `03_crea_database.sql` | 🏗️ Crea le 9 tabelle (GTFS + quartieri e sezioni) e la vista `v_passaggi_giorno_tipo` |
-| `04_query_analisi.sql` | 🔍 **18 query** divise per domanda: JOIN, viste, RANK, ROW_NUMBER, PERCENT_RANK, medie pesate |
+| `01RaccoltaDati` | 🐍 `01_scarica.py` (scarica i dati) e `02_pulizia.py` (pulisce e calcola) |
+| `02Dati` | ❌ `1GrezziNonPuliti` (dati scaricati) e ✅ `2Puliti` (tabelle pulite + confini + `registro_pulizia.csv`) |
+| `03SQL` | 🗄️ schemi, `01_crea_database.sql`, `02_carica_dati.py`, `03_query_analisi.sql`, `trasporti_napoli.db` |
+| `04Python` | 📓 `analisi_trasporti_napoli.ipynb`, `CONCLUSIONI.md`, i 9 grafici in `Grafici` |
+| `05PowerBi` | 📊 `TrasportiNapoliDashboard` (apri il `.pbip`), il PDF, `misure_DAX.txt`, tema, sfondo e script |
+| `GitHub` | 🚀 La versione leggera da caricare su GitHub |
 
 🧩 **Schema concettuale**
 
-![Schema concettuale](01SQL/01_schema_concettuale.png)
+![Schema concettuale](03SQL/schema_concettuale.png)
 
 🗂️ **Schema logico**
 
-![Schema logico](01SQL/02_schema_logico.png)
-
-### 📂 02Python
-
-| File | A cosa serve |
-|---|---|
-| `01_analisi_trasporti_napoli.ipynb` | 📓 L'analisi completa con 9 grafici e mappe (si legge anche su GitHub) |
-| `02_CONCLUSIONI.md` | ✅ Le risposte alle 5 domande |
-
-### 📂 03PowerBi
-
-| File | A cosa serve |
-|---|---|
-| `01_TrasportiNapoliDashboard.zip` | ⭐ **La dashboard**: estrai lo zip e apri `TrasportiNapoli_Dashboard.pbip` con Power BI Desktop |
-| `02_TrasportiNapoli_Dashboard.pdf` | 📄 La dashboard in PDF |
-| `03_misure_DAX.txt` | 🧮 Le 22 misure DAX |
+![Schema logico](03SQL/schema_logico.png)
 
 📊 **Le 7 pagine della dashboard**
 
@@ -153,13 +134,13 @@ GTFS di ANM ──────┐   quartieri + sezioni + abitanti ──┐
 
 ---
 
-## 📦 6. Dati e script
+## ▶️ 6. Come rifare tutto
 
-📌 Qui ci sono solo i **risultati**: schemi, query, analisi e dashboard.
-
-📥 I dati si possono riscaricare dalle fonti (link più sotto).
-
-🐍 Gli script Python di raccolta e pulizia dei dati e il database sono disponibili su richiesta.
+1. `python 01RaccoltaDati/01_scarica.py` → scarica i dati
+2. `python 01RaccoltaDati/02_pulizia.py` → crea le tabelle in `02Dati/2Puliti` (serve geopandas)
+3. `python 03SQL/02_carica_dati.py` e `python 03SQL/crea_schemi.py` → database e schemi
+4. `python 04Python/crea_notebook.py` → crea il notebook (poi eseguilo)
+5. `python 05PowerBi/Script/crea_immagini.py` e `crea_powerbi.py` → sfondo e dashboard
 
 ---
 
